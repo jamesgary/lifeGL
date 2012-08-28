@@ -45,15 +45,16 @@ define ->
     gl
   createProgram = (vertex, fragment) ->
     program = gl.createProgram()
-    vs = createShader(vertex, gl.VERTEX_SHADER)
-    fs = createShader("#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + fragment, gl.FRAGMENT_SHADER)
-    return null unless vs? && fs?
-    gl.attachShader(program, vs)
-    gl.attachShader(program, fs)
-    gl.deleteShader(vs)
-    gl.deleteShader(fs)
+    attachShader(createVertexShader(vertex), program)
+    attachShader(createFragmentShader(fragment), program)
     gl.linkProgram(program)
-    currentProgram = program
+    currentProgram = program # for global vars
+  createVertexShader   = (shader) -> createShader(shader, gl.VERTEX_SHADER)
+  createFragmentShader = (shader) -> createShader("#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + shader, gl.FRAGMENT_SHADER)
+  attachShader = (shader, program) ->
+    gl.attachShader(program, shader)
+    gl.deleteShader(shader)
+
   createShader = (src, type) ->
     shader = gl.createShader(type)
     gl.shaderSource(shader, src)
