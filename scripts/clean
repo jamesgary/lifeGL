@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+rm -rf public/*
+rm -rf spec/js/compiled/*
+
+echo Cleaned up public/ and spec/js/compiled
