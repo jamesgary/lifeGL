@@ -53,17 +53,11 @@ define ->
     gl.deleteShader(vs)
     gl.deleteShader(fs)
     gl.linkProgram(program)
-    unless gl.getProgramParameter(program, gl.LINK_STATUS)
-      alert "ERROR:\n" + "VALIDATE_STATUS: " + gl.getProgramParameter(program, gl.VALIDATE_STATUS) + "\n" + "ERROR: " + gl.getError() + "\n\n" + "- Vertex Shader -\n" + vertex + "\n\n" + "- Fragment Shader -\n" + fragment
-      return null
     currentProgram = program
   createShader = (src, type) ->
     shader = gl.createShader(type)
     gl.shaderSource(shader, src)
     gl.compileShader(shader)
-    unless gl.getShaderParameter(shader, gl.COMPILE_STATUS)
-      alert ((if type is gl.VERTEX_SHADER then "VERTEX" else "FRAGMENT")) + " SHADER:\n" + gl.getShaderInfoLog(shader)
-      return null
     shader
   animate = ->
     requestAnimationFrame(animate)
