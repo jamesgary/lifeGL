@@ -2,10 +2,9 @@ define ['lib/webglHelpers'], (webgl) ->
   tuneIn: (params) ->
     @canvas = params.canvas
     @gl = webgl.initGl(params)
-    @applyTriangleBuffer()
+    webgl.createProgram(params.vertex, params.fragment)
+    #@applyTriangleBuffer()
     @setViewport(params.width, params.height)
-
-    #webgl.createProgram(params.vertex, params.fragment)
   turnOn: ->
     webgl.animate()
   setViewport: (width, height) ->

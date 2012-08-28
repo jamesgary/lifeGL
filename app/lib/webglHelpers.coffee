@@ -9,11 +9,6 @@ define ->
     window.msRequestAnimationFrame ||
     (callback, element) -> window.setTimeout( callback, 1000 / 60 )
 
-
-
-
-
-
   canvas = undefined
   gl = undefined
   buffer = undefined
@@ -26,7 +21,7 @@ define ->
     screenWidth: 0
     screenHeight: 0
 
-  init = (params) ->
+  initGl = (params) ->
     canvas = params.canvas
     try
       gl = canvas.getContext("experimental-webgl")
@@ -47,8 +42,6 @@ define ->
       ]),
       gl.STATIC_DRAW)
 
-    # Create Program
-    currentProgram = createProgram(params.vertex, params.fragment)
     gl
   createProgram = (vertex, fragment) ->
     program = gl.createProgram()
@@ -63,7 +56,7 @@ define ->
     unless gl.getProgramParameter(program, gl.LINK_STATUS)
       alert "ERROR:\n" + "VALIDATE_STATUS: " + gl.getProgramParameter(program, gl.VALIDATE_STATUS) + "\n" + "ERROR: " + gl.getError() + "\n\n" + "- Vertex Shader -\n" + vertex + "\n\n" + "- Fragment Shader -\n" + fragment
       return null
-    program
+    currentProgram = program
   createShader = (src, type) ->
     shader = gl.createShader(type)
     gl.shaderSource(shader, src)
@@ -96,6 +89,7 @@ define ->
 
 
   {
-    initGl: init
+    initGl: initGl
     animate: animate
+    createProgram: createProgram
   }
