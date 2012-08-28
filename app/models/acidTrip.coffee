@@ -3,17 +3,15 @@ define ['lib/webglHelpers'], (webgl) ->
     @canvas = params.canvas
     @gl = webgl.initGl(params)
     @applyTriangleBuffer()
-    @windowResized() # prime the pump
+    @setViewport(params.width, params.height)
 
     #webgl.createProgram(params.vertex, params.fragment)
   turnOn: ->
     webgl.animate()
-  windowResized: (event) ->
-    newWidth = window.innerWidth
-    newHeight = window.innerHeight
-    @canvas.width = newWidth
-    @canvas.height = newHeight
-    @gl.viewport(0, 0, newWidth, newHeight)
+  setViewport: (width, height) ->
+    @canvas.width = width
+    @canvas.height = height
+    @gl.viewport(0, 0, width, height)
 
   ###########
   # private #
