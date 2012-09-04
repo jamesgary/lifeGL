@@ -2,5 +2,6 @@
 
 rm -rf public/*
 rm -rf spec/js/compiled/*
+touch app/** markup/** style/**
 
 echo Cleaned up public/ and spec/js/compiled
