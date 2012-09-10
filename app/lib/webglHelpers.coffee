@@ -1,14 +1,4 @@
-# Provides requestAnimationFrame in a cross browser way.
-# paulirish.com/2011/requestanimationframe-for-smart-animating/
-define ->
-  requestAnimationFrame =
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    (callback, element) -> window.setTimeout( callback, 1000 / 60 )
-
+define ['lib/gameLoop'], (gameLoop) ->
   canvas = undefined
   gl = undefined
   buffer = undefined
@@ -61,18 +51,15 @@ define ->
     gl.compileShader(shader)
     shader
   animate = ->
-    requestAnimationFrame(animate)
-    render()
+    gameLoop.loop(render)
   render = ->
-    return unless currentProgram
-    parameters.time = new Date().getTime() - parameters.start_time
-    gl.clear gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT
+    time = new Date().getTime() - parameters.start_time
 
     # Load program into GPU
     gl.useProgram(currentProgram)
 
     # Set values to program variables
-    gl.uniform1f(gl.getUniformLocation(currentProgram, "time"), parameters.time / 1000)
+    gl.uniform1f(gl.getUniformLocation(currentProgram, "time"), time / 1000)
     gl.uniform2f(gl.getUniformLocation(currentProgram, "resolution"), canvas.width, canvas.height)
 
     # Render geometry
@@ -82,9 +69,13 @@ define ->
     gl.drawArrays(gl.TRIANGLES, 0, 6)
     gl.disableVertexAttribArray(vertex_position)
 
-
   {
     initGl: initGl
     animate: animate
     createProgram: createProgram
+
+    ###########
+    # private #
+    ###########
+
   }
