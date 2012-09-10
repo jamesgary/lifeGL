@@ -25,22 +25,24 @@ define ['lib/gameLoop'], (gameLoop) ->
       @gl
     animate: ->
       gameLoop.loopThis(this, 'render')
-    createProgram: (vertex, fragment) ->
-      @currentProgram = @gl.createProgram()
-      @attachShader(@createVertexShader(vertex), @currentProgram)
-      @attachShader(@createFragmentShader(fragment), @currentProgram)
-      @gl.linkProgram(@currentProgram)
-      @currentProgram
+    addFragmentShaders: (shaders) ->
+      @addShaders(shaders, @fragmentShaderStrategy)
+    addVertexShaders: (shaders) ->
+      @addShaders(shaders, @vertexShaderStrategy)
 
     ###########
     # private #
     ###########
 
-    createVertexShader  : (shader) -> @createShader(shader, @gl.VERTEX_SHADER)
-    createFragmentShader: (shader) -> @createShader("#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + shader, @gl.FRAGMENT_SHADER)
-    attachShader: (shader, program) ->
-      @gl.attachShader(program, shader)
-      @gl.deleteShader(shader)
+    addShaders: (shaders, shaderStrategy) ->
+      @currentProgram = @currentProgram || @gl.createProgram()
+      for shader in shaders
+        @gl.attachShader(@currentProgram, shaderStrategy.call(this, shader))
+      @gl.linkProgram(@currentProgram)
+    vertexShaderStrategy: (shader) ->
+      @createShader(shader, @gl.VERTEX_SHADER)
+    fragmentShaderStrategy: (shader) ->
+      @createShader("#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + shader, @gl.FRAGMENT_SHADER)
     createShader: (src, type) ->
       shader = @gl.createShader(type)
       @gl.shaderSource(shader, src)

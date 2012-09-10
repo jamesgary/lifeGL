@@ -9,9 +9,9 @@ define ['models/acidTrip', 'jquery'], (acidTrip, $) ->
 
       acidTrip.tuneIn({
         canvas:   $('canvas')[0],
-        vertex:   $('#vs')[0].textContent,
-        fragment: $('#fs')[0].textContent,
         width:    window.innerWidth,
         height:   window.innerHeight,
+        vertexShaders:   [$('#vs')[0].textContent],
+        fragmentShaders: [$('#fs')[0].textContent],
       })
       acidTrip.turnOn()
