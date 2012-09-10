@@ -13,10 +13,10 @@ define ['lib/gameLoop'], (gameLoop) ->
         @gl.ARRAY_BUFFER,
         new Float32Array([
           -1.0, -1.0,
-          1.0, -1.0,
+           1.0, -1.0,
           -1.0,  1.0,
-          1.0, -1.0,
-          1.0,  1.0,
+           1.0, -1.0,
+           1.0,  1.0,
           -1.0,  1.0
         ]),
         @gl.STATIC_DRAW)
