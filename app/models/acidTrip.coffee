@@ -4,7 +4,7 @@ define ['lib/webglHelpers'], (webgl) ->
     @gl = webgl.initGl(params)
     webgl.addVertexShaders(params.vertexShaders)
     webgl.addFragmentShaders(params.fragmentShaders)
-    @applyTriangleBuffer()
+    #@applyTriangleBuffer()
     @setViewport(params.width, params.height)
   turnOn: ->
     webgl.animate()
@@ -17,19 +17,19 @@ define ['lib/webglHelpers'], (webgl) ->
   # private #
   ###########
 
-  applyTriangleBuffer: ->
-    # Create Vertex buffer (2 triangles)
-    triangleData = new Float32Array([
-      -1.0, -1.0,
-       1.0, -1.0,
-      -1.0,  1.0,
-       1.0, -1.0,
-       1.0,  1.0,
-      -1.0,  1.0
-    ])
-    @gl.bindBuffer(@gl.ARRAY_BUFFER, @gl.createBuffer())
-    @gl.bufferData(
-      @gl.ARRAY_BUFFER,
-      triangleData,
-      @gl.STATIC_DRAW
-    )
+  #applyTriangleBuffer: ->
+  #  # Create Vertex buffer (2 triangles)
+  #  triangleData = new Float32Array([
+  #    -1.0, -1.0,
+  #     1.0, -1.0,
+  #    -1.0,  1.0,
+  #     1.0, -1.0,
+  #     1.0,  1.0,
+  #    -1.0,  1.0
+  #  ])
+  #  @gl.bindBuffer(@gl.ARRAY_BUFFER, @gl.createBuffer())
+  #  @gl.bufferData(
+  #    @gl.ARRAY_BUFFER,
+  #    triangleData,
+  #    @gl.STATIC_DRAW
+  #  )
