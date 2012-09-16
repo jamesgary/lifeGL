@@ -4,7 +4,6 @@ define ['lib/webglHelpers', 'text!models/acidTrip/frag.glsl', 'text!models/acidT
     @gl = webgl.initGl(params)
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
-    #@applyTriangleBuffer()
     @setViewport(params.width, params.height)
   turnOn: ->
     webgl.animate()
@@ -12,24 +11,3 @@ define ['lib/webglHelpers', 'text!models/acidTrip/frag.glsl', 'text!models/acidT
     @canvas.width = width
     @canvas.height = height
     @gl.viewport(0, 0, width, height)
-
-  ###########
-  # private #
-  ###########
-
-  #applyTriangleBuffer: ->
-  #  # Create Vertex buffer (2 triangles)
-  #  triangleData = new Float32Array([
-  #    -1.0, -1.0,
-  #     1.0, -1.0,
-  #    -1.0,  1.0,
-  #     1.0, -1.0,
-  #     1.0,  1.0,
-  #    -1.0,  1.0
-  #  ])
-  #  @gl.bindBuffer(@gl.ARRAY_BUFFER, @gl.createBuffer())
-  #  @gl.bufferData(
-  #    @gl.ARRAY_BUFFER,
-  #    triangleData,
-  #    @gl.STATIC_DRAW
-  #  )

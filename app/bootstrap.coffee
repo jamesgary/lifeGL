@@ -1,7 +1,7 @@
 requirejs.config({
   paths: {
     jquery: 'vendor/jquery'
-    text: 'vendor/text'
+    text:   'vendor/text'
   }
 })
 
