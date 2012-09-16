@@ -11,3 +11,5 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     @canvas.width = width
     @canvas.height = height
     @gl.viewport(0, 0, width, height)
+  blot: (x, y) ->
+    webgl.setMouse(x, y)

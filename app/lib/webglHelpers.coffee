@@ -22,6 +22,7 @@ define ['lib/gameLoop'], (gameLoop) ->
         @gl.STATIC_DRAW)
 
       @start_time = new Date().getTime()
+      @mouse = {x:0, y:0}#null
       @gl
     animate: ->
       @gl.useProgram(@currentProgram)
@@ -30,6 +31,8 @@ define ['lib/gameLoop'], (gameLoop) ->
       @addShaders(shaders, @fragmentShaderStrategy)
     addVertexShaders: (shaders) ->
       @addShaders(shaders, @vertexShaderStrategy)
+    setMouse: (x, y) ->
+      @mouse = { x: x, y: y }
 
     ###########
     # private #
@@ -53,8 +56,11 @@ define ['lib/gameLoop'], (gameLoop) ->
       time = new Date().getTime() - @start_time
 
       # Set values to program variables
-      @gl.uniform1f(@gl.getUniformLocation(@currentProgram, "time"), time / 1000)
+      @gl.uniform1f(@gl.getUniformLocation(@currentProgram, "time"), time)
       @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "resolution"), @canvas.width, @canvas.height)
+
+      #if @mouse
+      @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x, @mouse.y)
 
       # Render geometry
       @gl.vertexAttribPointer(@vertex_position, 2, @gl.FLOAT, false, 0, 0)
