@@ -1,10 +1,10 @@
-js_folder = 'public/dev/js/compiled'
-js_spec_folder = 'spec/js/compiled'
+js_folder = 'public/dev/js'
+js_spec_folder = 'spec/js'
 quiet = true
 
 notification :growl
 
-# compile app coffeescript to public/dev/js/compiled
+# compile app coffeescript to public/dev/js
 guard 'coffeescript', {
   :all_on_start => true,
   :output => "#{js_folder}",
@@ -13,7 +13,7 @@ guard 'coffeescript', {
   watch(%r{^app/(.+\.coffee)$})
 end
 
-# compile spec coffeescript to spec/js/compiled
+# compile spec coffeescript to spec/js
 guard 'coffeescript', {
   :all_on_start => true,
   :output => "#{js_spec_folder}",
@@ -32,10 +32,10 @@ guard 'haml', {
   watch(%r{^.+(\.haml)$})
 end
 
-# compile sass to public/css/compiled
+# compile sass to public/css
 guard 'compass', {
   :all_on_start => true, # TODO this doesn't work either!
-  :css_dir => 'public/dev/css/compiled',
+  :css_dir => 'public/dev/css',
   :sass_dir => 'style',
   :hide_success => quiet,
 } do
@@ -56,14 +56,14 @@ end
 guard 'shell', {
   :all_on_start => true,
 } do
-  watch(%r{app/(.*\.js)$}) do |m|
+  watch(%r{app/(.*\.((js)|(glsl)))$}) do |m|
     source = m[0]
     target = "public/dev/js/#{m[1]}"
 
     if system("ditto #{source} #{target}")
-      n "Copied #{source} to #{target}", "Copied plain javascript", :success unless quiet
+      n "Copied #{source} to #{target}", "Copied plain file", :success unless quiet
     else
-      n "Couldn't copy #{source} to #{target}", "Failed to copy plain javascript", :failed
+      n "Couldn't copy #{source} to #{target}", "Failed to copy plain file", :failed
     end
   end
 end
