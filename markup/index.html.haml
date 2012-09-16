@@ -2,23 +2,8 @@
 %html
   %head
     %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=UTF-8'}/
-    %script{'data-main' => 'js/compiled/bootstrap.js', 'src' => 'js/vendor/require.js'}
-    %link{:rel => 'stylesheet', :type => 'text/css', :media => 'screen', :href => 'css/compiled/style.css'}/
+    %script{'data-main' => 'js/bootstrap.js', 'src' => 'js/vendor/require.js'}
+    %link{:rel => 'stylesheet', :type => 'text/css', :media => 'screen', :href => 'css/style.css'}/
   %body
     %canvas
     #info
-    %script#vs{:type => "x-shader/vertex"}
-      attribute vec3 position;
-      void main() {
-      gl_Position = vec4( position, 1.0 );
-      }
-    %script#fs{:type => "x-shader/fragment"}
-      uniform float time;
-      uniform vec2 resolution;
-      void main( void ) {
-      vec2 position = - 1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
-      float red = abs( sin( position.x * position.y + time / 3.0 ) );
-      float green = abs( sin( position.x * position.y + time / 2.0 ) );
-      float blue = abs( sin( position.x * position.y + time / 1.0 ) );
-      gl_FragColor = vec4( red, green, blue, 1.0 );
-      }

@@ -1,4 +1,4 @@
-define ['models/acidTrip', 'jquery'], (acidTrip, $) ->
+define ['models/acidTrip/acidTrip', 'jquery'], (acidTrip, $) ->
   setup: ->
     $('document').ready ->
       window.addEventListener(
@@ -11,7 +11,5 @@ define ['models/acidTrip', 'jquery'], (acidTrip, $) ->
         canvas:   $('canvas')[0],
         width:    window.innerWidth,
         height:   window.innerHeight,
-        vertexShaders:   [$('#vs')[0].textContent],
-        fragmentShaders: [$('#fs')[0].textContent],
       })
       acidTrip.turnOn()

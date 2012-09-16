@@ -1,9 +1,9 @@
-define ['lib/webglHelpers'], (webgl) ->
+define ['lib/webglHelpers', 'text!models/acidTrip/frag.glsl', 'text!models/acidTrip/vert.glsl' ], (webgl, fragShader, vertShader) ->
   tuneIn: (params) ->
     @canvas = params.canvas
     @gl = webgl.initGl(params)
-    webgl.addVertexShaders(params.vertexShaders)
-    webgl.addFragmentShaders(params.fragmentShaders)
+    webgl.addVertexShaders([vertShader])
+    webgl.addFragmentShaders([fragShader])
     #@applyTriangleBuffer()
     @setViewport(params.width, params.height)
   turnOn: ->
