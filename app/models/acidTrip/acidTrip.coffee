@@ -1,4 +1,4 @@
-define ['lib/webglHelpers', 'text!models/acidTrip/frag.glsl', 'text!models/acidTrip/vert.glsl' ], (webgl, fragShader, vertShader) ->
+define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fragShader, vertShader) ->
   tuneIn: (params) ->
     @canvas = params.canvas
     @gl = webgl.initGl(params)
