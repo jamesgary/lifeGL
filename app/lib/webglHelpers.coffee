@@ -6,24 +6,11 @@ define ['lib/gameLoop'], (gameLoop) ->
         @gl = @canvas.getContext("experimental-webgl")
       throw "cannot create webgl context" unless @gl
 
-      # Create Vertex buffer (2 triangles)
-      @buffer = @gl.createBuffer()
-      @gl.bindBuffer(@gl.ARRAY_BUFFER, @buffer)
-      @gl.bufferData(
-        @gl.ARRAY_BUFFER,
-        new Float32Array([
-          -1.0, -1.0,
-           1.0, -1.0,
-          -1.0,  1.0,
-           1.0, -1.0,
-           1.0,  1.0,
-          -1.0,  1.0
-        ]),
-        @gl.STATIC_DRAW)
+      # Create Vertex buffer (2 triangles, making a rectangle)
+      @gl.bindBuffer(@gl.ARRAY_BUFFER, @gl.createBuffer())
+      @gl.bufferData(@gl.ARRAY_BUFFER, @squareData, @gl.STATIC_DRAW)
 
       @start_time = new Date().getTime()
-      @mouse = {x:0, y:0}#null
-      @gl
     animate: ->
       @gl.useProgram(@currentProgram)
       gameLoop.loopThis(this, 'render')
@@ -31,6 +18,8 @@ define ['lib/gameLoop'], (gameLoop) ->
       @addShaders(shaders, @fragmentShaderStrategy)
     addVertexShaders: (shaders) ->
       @addShaders(shaders, @vertexShaderStrategy)
+    setViewport: (width, height) ->
+      @gl.viewport(0, 0, width, height)
     setMouse: (x, y) ->
       @mouse = { x: x, y: y }
 
@@ -38,6 +27,14 @@ define ['lib/gameLoop'], (gameLoop) ->
     # private #
     ###########
 
+    squareData: new Float32Array([
+      -1.0, -1.0,
+       1.0, -1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+       1.0,  1.0,
+      -1.0,  1.0
+    ])
     addShaders: (shaders, shaderStrategy) ->
       @currentProgram = @currentProgram || @gl.createProgram()
       for shader in shaders
@@ -58,9 +55,10 @@ define ['lib/gameLoop'], (gameLoop) ->
       # Set values to program variables
       @gl.uniform1f(@gl.getUniformLocation(@currentProgram, "time"), time)
       @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "resolution"), @canvas.width, @canvas.height)
+      @gl.uniform1i(@gl.getUniformLocation(@currentProgram, "backbuffer"), 0)
 
-      #if @mouse
-      @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x, @mouse.y)
+      if @mouse
+        @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x, @mouse.y)
 
       # Render geometry
       @gl.vertexAttribPointer(@vertex_position, 2, @gl.FLOAT, false, 0, 0)
