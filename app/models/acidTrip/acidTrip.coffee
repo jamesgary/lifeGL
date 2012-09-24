@@ -1,15 +1,12 @@
 define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fragShader, vertShader) ->
   tuneIn: (params) ->
-    @canvas = params.canvas
-    webgl.initGl(params)
+    webgl.initGl(params.canvas)
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
-    @setViewport(params.width, params.height)
+    @setViewport(params.width, params.height) # prime the pump
   turnOn: ->
     webgl.animate()
   setViewport: (width, height) ->
-    @canvas.width = width
-    @canvas.height = height
     webgl.setViewport(width, height)
   blot: (x, y) ->
     webgl.setMouse(x, y)
