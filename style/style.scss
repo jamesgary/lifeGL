@@ -1,5 +1,6 @@
 @import 'compass/css3';
 @import "compass/css3/user-interface";
+@import url('jquery.miniColors.css');
 
 body {
   // Willow theme: http://kuler.adobe.com/#themeID/2066229
@@ -90,6 +91,9 @@ body {
       text-align: center;
       width: 20px;
       display: inline-block;
+    }
+    .colorPicker input {
+      display: none;
     }
   }
 }

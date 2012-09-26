@@ -20,6 +20,8 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @paused = true
   reset: ->
     @createTargets()
+  setVar: (name, val) ->
+    @customVars[name] = val
 
   ###########
   # private #
@@ -47,6 +49,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @currentProgram = @gl.createProgram()
     @setViewport(@canvas.width, @canvas.height)
     @start_time = new Date().getTime()
+    @customVars = {}
   compile: ->
     @gl.linkProgram(@currentProgram)
     unless @gl.getProgramParameter(@currentProgram, @gl.LINK_STATUS)
@@ -119,6 +122,10 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "resolution"), @canvas.width, @canvas.height)
     @gl.uniform1i(@gl.getUniformLocation(@currentProgram, "backbuffer"), 0)
     @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x, @mouse.y) if @mouse
+
+    for name, val of @customVars
+      @gl.uniform4f(@gl.getUniformLocation(@currentProgram, name), val...)
+
     @gl.activeTexture(@gl.TEXTURE0)
     @gl.bindTexture(@gl.TEXTURE_2D, @backTarget.texture)
 

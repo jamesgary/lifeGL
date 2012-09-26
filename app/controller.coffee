@@ -1,4 +1,4 @@
-define ['models/life/life', 'jquery'], (life, $) ->
+define ['models/life/life', 'jquery', 'miniColors'], (life, $) ->
   setup: ->
     $('document').ready ->
       window.addEventListener(
@@ -28,6 +28,16 @@ define ['models/life/life', 'jquery'], (life, $) ->
           button.html('I I')
       )
       $('.reset').click(life.reset)
+      $('.colorPicker .cell').miniColors({
+        opacity: false,
+        change: (hex, rgb) ->
+          life.setCellColor(rgb.r, rgb.b, rgb.b)
+      })
+      $('.colorPicker .background').miniColors({
+        opacity: false,
+        change: (hex, rgb) ->
+          $('body').css('background-color', hex)
+      })
 
       life.setup({
         canvas:   $('canvas')[0],

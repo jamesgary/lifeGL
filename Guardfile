@@ -1,6 +1,6 @@
 js_folder = 'public/dev/js'
 js_spec_folder = 'spec/js'
-quiet = true
+@quiet = true
 
 notification :growl
 
@@ -8,7 +8,7 @@ notification :growl
 guard 'coffeescript', {
   :all_on_start => true,
   :output => "#{js_folder}",
-  :hide_success => quiet,
+  :hide_success => @quiet,
 } do
   watch(%r{^app/(.+\.coffee)$})
 end
@@ -17,7 +17,7 @@ end
 guard 'coffeescript', {
   :all_on_start => true,
   :output => "#{js_spec_folder}",
-  :hide_success => quiet,
+  :hide_success => @quiet,
 } do
   watch(%r{^spec/(.+\.coffee)$})
 end
@@ -27,7 +27,7 @@ guard 'haml', {
   :all_on_start => true, # TODO this doesn't work!
   :input => 'markup',
   :output => 'public/dev',
-  :hide_success => quiet,
+  :hide_success => @quiet,
 } do
   watch(%r{^.+(\.haml)$})
 end
@@ -37,7 +37,7 @@ guard 'compass', {
   :all_on_start => true, # TODO this doesn't work either!
   :css_dir => 'public/dev/css',
   :sass_dir => 'style',
-  :hide_success => quiet,
+  :hide_success => @quiet,
 } do
   watch(/^(.*)\.s[ac]ss$/)
 end
@@ -52,18 +52,24 @@ end
 #  watch(%r{public/dev/js/.+\.js$}) { "spec/javascripts" } #TODO? why spec/javascripts ?
 #end
 
+def ditto(source, target, type)
+  watch(source) do |m|
+    src = m[0]
+    tgt = "public/dev/#{target}/#{m[1]}"
+
+    if system("ditto #{src} #{tgt}")
+      n "Copied #{src} to #{tgt}", "Copied #{type} file", :success unless @quiet
+    else
+      n "Couldn't copy #{src} to #{tgt}", "Failed to copy #{type} file", :failed
+    end
+  end
+end
+
 # copy plain javascript in app to public, just like coffeescript
 guard 'shell', {
   :all_on_start => true,
 } do
-  watch(%r{app/(.*\.((js)|(glsl)))$}) do |m|
-    source = m[0]
-    target = "public/dev/js/#{m[1]}"
-
-    if system("ditto #{source} #{target}")
-      n "Copied #{source} to #{target}", "Copied plain file", :success unless quiet
-    else
-      n "Couldn't copy #{source} to #{target}", "Failed to copy plain file", :failed
-    end
-  end
+  ditto(%r{^app/(.*\.((js)|(glsl)))$}, 'js', 'js/glsl')
+  ditto(%r{^style/(.*\.css)$}, 'css', 'css')
+  ditto(%r{^images/(.*)$}, 'css/images', 'image')
 end

@@ -11,14 +11,13 @@
       %a.hide{:title => 'Toggle Dashboard'}
       %a.button.playToggler.pause{:title => 'Pause'} I I
       %a.button.reset Reset
-      %a.button.fullScreen Fullscreen
 
-      /.colorPicker
-      /  %h3 Foreground:
-      /  .foreground
-      /.colorPicker
-      /  %h3 Background:
-      /  .background
+      .colorPicker
+        %h3 Cell:
+        %input.cell
+      .colorPicker
+        %h3 Background:
+        %input.background
 
       /.ranger
       /  %h3 Cellsize:

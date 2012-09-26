@@ -2,6 +2,7 @@ uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
 uniform sampler2D backbuffer;
+uniform vec4 cellColor;
 
 void main( void ) {
   float t = time / 1000.0; // not used right now
@@ -10,8 +11,11 @@ void main( void ) {
   float d = distance(gl_FragCoord.xy, m.xy);
   float aspect = resolution.x/resolution.y;
 
+  vec4 cColor = cellColor;
+  vec4 bColor = vec4(0.0, 0.0, 0.0, 0.0);
+
   if (m != vec2(0.0, 0.0) && d < 20.0) {
-		gl_FragColor = vec4( vec3( 1.0, 0.5, 0.5 ), 1.0 );
+		gl_FragColor = cColor;
 	} else {
 		float dx = 0.0008;
 		float dy = dx * aspect;
@@ -28,15 +32,15 @@ void main( void ) {
 		vec4 s = v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
 
 		// live cell
-		if ( v0.x == 1.0 ) {
-			if ( s.x < 2.0 || s.x > 3.0 )
-				gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
+		if ( v0.a == 1.0 ) {
+			if ( s.a < 2.0 || s.a > 3.0 )
+				gl_FragColor = bColor;
 			else
-				gl_FragColor = vec4( 1.0, 0.5, 0.5, 1.0 );
+				gl_FragColor = cColor;
 		// dead cell
 		} else {
-			if ( s.x == 3.0 )
-				gl_FragColor = vec4( 1.0, 0.5, 0.5, 1.0 );
+			if ( s.a == 3.0 )
+				gl_FragColor = cColor;
 		}
 	}
 }
