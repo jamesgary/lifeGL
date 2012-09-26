@@ -2,6 +2,6 @@
 
 rm -rf public/*
 rm -rf spec/js/compiled/*
-find app markup style | grep -E '\.((js)|(glsl)|(css)|(html)|(coffee)|(haml)|(scss))$' | xargs touch
+find app markup images style | grep -E '\.((js)|(glsl)|(css)|(html)|(coffee)|(haml)|(scss))$' | xargs touch
 
 echo Cleaned up public/ and spec/js/compiled

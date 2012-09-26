@@ -4,7 +4,8 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
     @setViewport(params.width, params.height) # prime the pump
-    webgl.setVar('cellColor', @hexToGlslRgb('a8f565'))
+    @cellColor = 'a8f565'
+    webgl.setVar('cellColor', @hexToGlslRgb(@cellColor))
   start: ->
     webgl.animate()
   pause: ->
@@ -18,7 +19,7 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
   fullScreen: ->
     webgl.fullScreen()
   setCellColor: (r, g, b) ->
-    webgl.setVar('cellColor', [r / 255.0, g / 255.0, b / 255.0, 1.0])
+    webgl.setVar('cellColor', @glslRgb(r, g, b))
 
   ###########
   # private #
