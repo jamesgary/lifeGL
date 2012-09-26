@@ -13,12 +13,13 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @canvas.width = width
     @canvas.height = height
     @gl.viewport(0, 0, width, height)
-    @frontTarget = @createTarget(@canvas.width, @canvas.height)
-    @backTarget  = @createTarget(@canvas.width, @canvas.height)
+    @createTargets()
   setMouse: (x, y) ->
     @mouse = { x: x, y: y }
   pause: ->
     @paused = true
+  reset: ->
+    @createTargets()
 
   ###########
   # private #
@@ -59,7 +60,12 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.vertexAttribPointer(    @someVertexPosition, 2, @gl.FLOAT, false, 0, 0)
     @gl.enableVertexAttribArray(@someVertexPosition)
 
+  createTargets: ->
+    @frontTarget = @createTarget()
+    @backTarget  = @createTarget()
   createTarget: (width, height) ->
+    width =  @canvas.width
+    height = @canvas.height
     target = {}
     target.framebuffer  = @gl.createFramebuffer()
     target.renderbuffer = @gl.createRenderbuffer()

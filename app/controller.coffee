@@ -1,14 +1,14 @@
-define ['models/acidTrip/acidTrip', 'jquery'], (acidTrip, $) ->
+define ['models/life/life', 'jquery'], (life, $) ->
   setup: ->
     $('document').ready ->
       window.addEventListener(
         "resize",
-        (event) -> acidTrip.setViewport(window.innerWidth, window.innerHeight)
+        (event) -> life.setViewport(window.innerWidth, window.innerHeight)
         false
       )
       window.addEventListener(
         'mousemove',
-        (event) -> acidTrip.blot(
+        (event) -> life.setMouse(
           event.clientX,
           event.clientY,
         ),
@@ -17,20 +17,21 @@ define ['models/acidTrip/acidTrip', 'jquery'], (acidTrip, $) ->
       $('.playToggler').click( ->
         button = $(this)
         if button.hasClass('pause')
-          acidTrip.pause()
+          life.pause()
           button.removeClass('pause')
           button.addClass('play')
           button.html("&#9658;")
         else
-          acidTrip.start()
+          life.start()
           button.removeClass('play')
           button.addClass('pause')
           button.html('I I')
       )
+      $('.reset').click(life.reset)
 
-      acidTrip.tuneIn({
+      life.setup({
         canvas:   $('canvas')[0],
         width:    window.innerWidth,
         height:   window.innerHeight,
       })
-      acidTrip.start()
+      life.start()
