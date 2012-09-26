@@ -14,10 +14,23 @@ define ['models/acidTrip/acidTrip', 'jquery'], (acidTrip, $) ->
         ),
         false
       )
+      $('.playToggler').click( ->
+        button = $(this)
+        if button.hasClass('pause')
+          acidTrip.pause()
+          button.removeClass('pause')
+          button.addClass('play')
+          button.html("&#9658;")
+        else
+          acidTrip.start()
+          button.removeClass('play')
+          button.addClass('pause')
+          button.html('I I')
+      )
 
       acidTrip.tuneIn({
         canvas:   $('canvas')[0],
         width:    window.innerWidth,
         height:   window.innerHeight,
       })
-      acidTrip.turnOn()
+      acidTrip.start()

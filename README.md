@@ -11,13 +11,14 @@
 
 Use webgl shader
 Maybe use the default option setter thingy?
+
 Here's what we'll have for sure, bare minimum:
   BUTTON: Play/pause
   BUTTON: Reset
   BUTTON: Fullscreen
-  COLOR\_PICKER: FG
-  COLOR\_PICKER: BG
-  RANGE: Size (1px, 2, 4, etc)
+  COLOR_PICKER: FG
+  COLOR_PICKER: BG
+  RANGE: Size (1px, 2, 3, etc)
   live cells:
     dRANGE: MIN/MAX NEIGHBORS
   dead cells:

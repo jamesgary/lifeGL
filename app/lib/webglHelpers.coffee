@@ -3,6 +3,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @initialize()
   animate: ->
     @compile()
+    @paused = false
     gameLoop.loopThis(this, 'render')
   addFragmentShaders: (shaders) ->
     @addShaders(shaders, @fragmentShaderStrategy)
@@ -16,6 +17,8 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @backTarget  = @createTarget(@canvas.width, @canvas.height)
   setMouse: (x, y) ->
     @mouse = { x: x, y: y }
+  pause: ->
+    @paused = true
 
   ###########
   # private #
@@ -35,7 +38,6 @@ define ['lib/gameLoop'], (gameLoop) -> {
     try
       @gl = @canvas.getContext("experimental-webgl")
     throw "cannot create webgl context" unless @gl
-    @currentProgram = @gl.createProgram()
 
     # Create rectangular vertex buffer
     @buffer = @gl.createBuffer()
@@ -59,33 +61,38 @@ define ['lib/gameLoop'], (gameLoop) -> {
 
   createTarget: (width, height) ->
     target = {}
-    target.framebuffer = @gl.createFramebuffer()
+    target.framebuffer  = @gl.createFramebuffer()
     target.renderbuffer = @gl.createRenderbuffer()
-    target.texture = @gl.createTexture()
+    target.texture      = @gl.createTexture()
 
     # set up framebuffer
-    @gl.bindTexture @gl.TEXTURE_2D, target.texture
-    @gl.texImage2D @gl.TEXTURE_2D, 0, @gl.RGBA, width, height, 0, @gl.RGBA, @gl.UNSIGNED_BYTE, null
-    @gl.texParameteri @gl.TEXTURE_2D, @gl.TEXTURE_WRAP_S, @gl.CLAMP_TO_EDGE
-    @gl.texParameteri @gl.TEXTURE_2D, @gl.TEXTURE_WRAP_T, @gl.CLAMP_TO_EDGE
-    @gl.texParameteri @gl.TEXTURE_2D, @gl.TEXTURE_MAG_FILTER, @gl.NEAREST
-    @gl.texParameteri @gl.TEXTURE_2D, @gl.TEXTURE_MIN_FILTER, @gl.NEAREST
-    @gl.bindFramebuffer @gl.FRAMEBUFFER, target.framebuffer
+    @gl.bindTexture          @gl.TEXTURE_2D,  target.texture
+    @gl.texImage2D           @gl.TEXTURE_2D,  0, @gl.RGBA, width, height, 0, @gl.RGBA, @gl.UNSIGNED_BYTE, null
+    @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_WRAP_S, @gl.CLAMP_TO_EDGE
+    @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_WRAP_T, @gl.CLAMP_TO_EDGE
+    @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_MAG_FILTER, @gl.NEAREST
+    @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_MIN_FILTER, @gl.NEAREST
+    @gl.bindFramebuffer      @gl.FRAMEBUFFER, target.framebuffer
     @gl.framebufferTexture2D @gl.FRAMEBUFFER, @gl.COLOR_ATTACHMENT0, @gl.TEXTURE_2D, target.texture, 0
 
     # set up renderbuffer
-    @gl.bindRenderbuffer @gl.RENDERBUFFER, target.renderbuffer
-    @gl.renderbufferStorage @gl.RENDERBUFFER, @gl.DEPTH_COMPONENT16, width, height
-    @gl.framebufferRenderbuffer @gl.FRAMEBUFFER, @gl.DEPTH_ATTACHMENT, @gl.RENDERBUFFER, target.renderbuffer
+    @gl.bindRenderbuffer        @gl.RENDERBUFFER, target.renderbuffer
+    @gl.renderbufferStorage     @gl.RENDERBUFFER, @gl.DEPTH_COMPONENT16, width, height
+    @gl.framebufferRenderbuffer @gl.FRAMEBUFFER,  @gl.DEPTH_ATTACHMENT, @gl.RENDERBUFFER, target.renderbuffer
 
     # clean up
-    @gl.bindTexture @gl.TEXTURE_2D, null
+    @gl.bindTexture      @gl.TEXTURE_2D, null
     @gl.bindRenderbuffer @gl.RENDERBUFFER, null
-    @gl.bindFramebuffer @gl.FRAMEBUFFER, null
+    @gl.bindFramebuffer  @gl.FRAMEBUFFER, null
     target
   addShaders: (shaders, shaderStrategy) ->
     for shader in shaders
-      @gl.attachShader(@currentProgram, shaderStrategy.call(this, shader))
+      shaderObj = shaderStrategy.call(this, shader)
+      errorMessage = @gl.getShaderInfoLog(shaderObj)
+      if errorMessage
+        console.log("SHADER ERROR: " + errorMessage)
+      else
+        @gl.attachShader(@currentProgram, shaderObj)
       # @gl.deleteShader(shader)
   vertexShaderStrategy: (shader) ->
     @createShader(shader, @gl.VERTEX_SHADER)
@@ -98,7 +105,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
     shader
 
   render: ->
-    return unless @currentProgram
+    return if @paused || !@currentProgram
 
     # Set uniforms for custom shader
     @gl.useProgram( @currentProgram)
@@ -111,13 +118,13 @@ define ['lib/gameLoop'], (gameLoop) -> {
 
     # Render custom shader to front buffer
     @gl.bindFramebuffer(@gl.FRAMEBUFFER, @frontTarget.framebuffer)
-    @gl.clear(@gl.COLOR_BUFFER_BIT | @gl.DEPTH_BUFFER_BIT)
-    @gl.drawArrays(@gl.TRIANGLES, 0, 6)
+    @gl.clear(          @gl.COLOR_BUFFER_BIT | @gl.DEPTH_BUFFER_BIT)
+    @gl.drawArrays(     @gl.TRIANGLES, 0, 6)
 
     # Render front buffer to screen
     @gl.bindFramebuffer(@gl.FRAMEBUFFER, null)
-    @gl.clear(@gl.COLOR_BUFFER_BIT | @gl.DEPTH_BUFFER_BIT)
-    @gl.drawArrays(@gl.TRIANGLES, 0, 6)
+    @gl.clear(          @gl.COLOR_BUFFER_BIT | @gl.DEPTH_BUFFER_BIT)
+    @gl.drawArrays(     @gl.TRIANGLES, 0, 6)
 
     # Swap buffers
     tmp = @frontTarget

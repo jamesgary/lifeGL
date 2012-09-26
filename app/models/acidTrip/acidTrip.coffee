@@ -4,8 +4,10 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
     @setViewport(params.width, params.height) # prime the pump
-  turnOn: ->
+  start: ->
     webgl.animate()
+  pause: ->
+    webgl.pause()
   setViewport: (width, height) ->
     webgl.setViewport(width, height)
   blot: (x, y) ->

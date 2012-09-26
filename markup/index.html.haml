@@ -6,4 +6,35 @@
     %link{:rel => 'stylesheet', :type => 'text/css', :media => 'screen', :href => 'css/style.css'}/
   %body
     %canvas
-    #info
+    .dashboard
+      %h1 Game of Life - Powered by WebGL
+      %a.hide{:title => 'Toggle Dashboard'}
+      %a.button.playToggler.pause{:title => 'Pause'} I I
+      %a.button.reset Reset
+      %a.button.fullScreen Fullscreen
+
+      /.colorPicker
+      /  %h3 Foreground:
+      /  .foreground
+      /.colorPicker
+      /  %h3 Background:
+      /  .background
+
+      /.ranger
+      /  %h3 Cellsize:
+      /  .cellSize
+
+      /.ranger
+      /  %h3
+      /    .alive Live cells
+      /    stay
+      /    .alive alive
+      /    if their neighbor count is within:
+      /  .liveCellRule
+      /.ranger
+      /  %h3
+      /    .dead Dead cells
+      /    become
+      /    .alive alive
+      /    if their neighbor count is within:
+      /  .deadCellRule
