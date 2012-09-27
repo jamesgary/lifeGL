@@ -134,7 +134,10 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x / @pixelSize, @mouse.y / @pixelSize) if @mouse
 
     for name, val of @customVars
-      @gl.uniform4f(@gl.getUniformLocation(@currentProgram, name), val...)
+      if val.length == 4
+        @gl.uniform4f(@gl.getUniformLocation(@currentProgram, name), val...)
+      else
+        @gl.uniform1f(@gl.getUniformLocation(@currentProgram, name), val)
 
     @gl.activeTexture(@gl.TEXTURE0)
     @gl.bindTexture(@gl.TEXTURE_2D, @backTarget.texture)

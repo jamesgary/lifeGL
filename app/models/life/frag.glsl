@@ -4,12 +4,17 @@ uniform vec2 resolution;
 uniform sampler2D backbuffer;
 uniform vec4 cellColor;
 
+uniform float minLiveNeighborRule;
+uniform float maxLiveNeighborRule;
+uniform float minDeadNeighborRule;
+uniform float maxDeadNeighborRule;
+
 void main( void ) {
   float t = time / 1000.0; // not used right now
   vec2  p = gl_FragCoord.xy / resolution.xy;
   vec2  m = vec2(mouse.x, resolution.y - mouse.y);
   float d = distance(gl_FragCoord.xy, m.xy);
-  float aspect = resolution.x/resolution.y;
+  float aspect = resolution.x / resolution.y;
   float circleSize = 0.01 * resolution.x;
 
   vec4 cColor = cellColor;
@@ -34,13 +39,14 @@ void main( void ) {
 
 		// live cell
 		if ( v0.a == 1.0 ) {
-			if ( s.a < 2.0 || s.a > 3.0 )
-				gl_FragColor = bColor;
-			else
+			//if ( s.a < 2.0 || s.a > 3.0 )
+			if (minLiveNeighborRule <= s.a && s.a <= maxLiveNeighborRule)
 				gl_FragColor = cColor;
+			else
+				gl_FragColor = bColor;
 		// dead cell
 		} else {
-			if ( s.a == 3.0 )
+			if (minDeadNeighborRule <= s.a && s.a <= maxDeadNeighborRule)
 				gl_FragColor = cColor;
 		}
 	}

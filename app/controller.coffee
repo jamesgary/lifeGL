@@ -1,4 +1,4 @@
-define ['models/life/life', 'jquery', 'miniColors', 'nouislider'], (life, $) ->
+define ['models/life/life', 'jquery', 'miniColors'], (life, $) ->
   setup: ->
     self = this
     $('document').ready ->
@@ -8,6 +8,8 @@ define ['models/life/life', 'jquery', 'miniColors', 'nouislider'], (life, $) ->
       self.setResetListener()
       self.setColorListener()
       self.setCellSizeListener()
+      self.setLiveNeighborRuleListener()
+      self.setDeadNeighborRuleListener()
       self.startLife()
 
   ###########
@@ -67,18 +69,48 @@ define ['models/life/life', 'jquery', 'miniColors', 'nouislider'], (life, $) ->
     }).miniColors('value', rgb2hex($('body').css('background-color')))
 
   setCellSizeListener: ->
-    oldPixelSize = 1
-    $('.cellSize').noUiSlider('init', {
-      scale: [1, 10],
-      start: [oldPixelSize],
-      knobs: 1,
-      connect: 'lower',
-      change: ->
-        size = $(this).noUiSlider('value')[1]
-        unless size == oldPixelSize # don't do unnecessary work
-          life.setPixelSize(size)
-          oldPixelSize = size
-    })
+    sizes = [1, 2, 3, 4, 5]
+    $select = $('select.cellSize')
+    for size in sizes
+      $select.append($('<option/>', {value: size, text: size }))
+    $select.change(->
+      size = @value
+      life.setPixelSize(size)
+    )
+
+  setLiveNeighborRuleListener: ->
+    $cellMin = $('select.liveCellMin')
+    $cellMax = $('select.liveCellMax')
+    @giveOptions($cellMin, @numToNum(0, 3))
+    @giveOptions($cellMax, @numToNum(2, 8))
+    self = this
+    $cellMin.change(->
+      self.giveOptions($cellMax, self.numToNum(@value, 8))
+      life.setMinLiveNeighborRule(@value)
+    )
+    $cellMax.change(->
+      self.giveOptions($cellMin, self.numToNum(0, @value))
+      life.setMaxLiveNeighborRule(@value)
+    )
+    $cellMin.val(2)
+    $cellMax.val(3)
+
+  setDeadNeighborRuleListener: ->
+    $cellMin = $('select.deadCellMin')
+    $cellMax = $('select.deadCellMax')
+    @giveOptions($cellMin, @numToNum(0, 3))
+    @giveOptions($cellMax, @numToNum(3, 8))
+    self = this
+    $cellMin.change(->
+      self.giveOptions($cellMax, self.numToNum(@value, 8))
+      life.setMinDeadNeighborRule(@value)
+    )
+    $cellMax.change(->
+      self.giveOptions($cellMin, self.numToNum(0, @value))
+      life.setMaxDeadNeighborRule(@value)
+    )
+    $cellMin.val(3)
+    $cellMax.val(3)
 
   startLife: ->
     life.setup({
@@ -87,3 +119,24 @@ define ['models/life/life', 'jquery', 'miniColors', 'nouislider'], (life, $) ->
       height:   window.innerHeight,
     })
     life.start()
+
+  ############################################
+  # functions not called directly by setup() #
+  ############################################
+
+  giveOptions: ($select, array) ->
+    originalValue = $select.val()
+    $select.html('')
+    for i in array
+      $select.append($('<option/>', {value: i, text: i}))
+    $select.val(originalValue)
+
+  numToNum: (a, b) ->
+    a = parseInt(a)
+    b = parseInt(b)
+    return [] if a > b
+    array = []
+    while a <= b
+      array.push a
+      a += 1
+    array

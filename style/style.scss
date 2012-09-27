@@ -1,7 +1,6 @@
 @import 'compass/css3';
 @import "compass/css3/user-interface";
 @import url('jquery.miniColors.css');
-@import url('nouislider.css');
 
 @mixin sharpen-image {
   // woefully unsupported
@@ -104,11 +103,22 @@ body {
       width: 20px;
       display: inline-block;
     }
-    .colorPicker input {
-      display: none;
+    .colorPicker {
+      display: inline-block;
+      h3 { display: inline-block; }
+      input { display: none; }
     }
-    .cellSize {
-      width: 200px;
+    .ranger {
+      display: inline-block;
+      h3 { display: inline-block; }
+    }
+    .dead {
+      font-weight: bold;
+      color: red;
+    }
+    .alive {
+      font-weight: bold;
+      color: lighten(green, 20%);
     }
   }
 }

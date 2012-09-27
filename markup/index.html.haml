@@ -20,20 +20,29 @@
         %input.background
 
       .ranger
-        %h3 Cellsize:
-        .cellSize
+        %h3 Cell Size:
+        %select.cellSize
 
-      /.ranger
-      /  %h3
-      /    .alive Live cells
-      /    stay
-      /    .alive alive
-      /    if their neighbor count is within:
-      /  .liveCellRule
-      /.ranger
-      /  %h3
-      /    .dead Dead cells
-      /    become
-      /    .alive alive
-      /    if their neighbor count is within:
-      /  .deadCellRule
+      %br
+
+      .ranger
+        %span.alive Live cells
+        stay
+        %span.alive alive
+        if they have between
+        %select.liveCellMin
+        and
+        %select.liveCellMax
+        neighbors.
+
+      %br
+
+      .ranger
+        %span.dead Dead cells
+        become
+        %span.alive alive
+        if they have between
+        %select.deadCellMin
+        and
+        %select.deadCellMax
+        neighbors.

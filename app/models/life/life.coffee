@@ -6,6 +6,10 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     @setDimensions(params.width, params.height)
     @cellColor = 'a8f565'
     webgl.setVar('cellColor', @hexToGlslRgb(@cellColor))
+    webgl.setVar('minLiveNeighborRule', 2)
+    webgl.setVar('maxLiveNeighborRule', 3)
+    webgl.setVar('minDeadNeighborRule', 3)
+    webgl.setVar('maxDeadNeighborRule', 3)
   start: ->
     webgl.animate()
   pause: ->
@@ -23,6 +27,14 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
   setPixelSize: (pixelSize) ->
     #console.log pixelSize
     webgl.setPixelSize(pixelSize)
+  setMinLiveNeighborRule: (num) ->
+    webgl.setVar('minLiveNeighborRule', num)
+  setMaxLiveNeighborRule: (num) ->
+    webgl.setVar('maxLiveNeighborRule', num)
+  setMinDeadNeighborRule: (num) ->
+    webgl.setVar('minDeadNeighborRule', num)
+  setMaxDeadNeighborRule: (num) ->
+    webgl.setVar('maxDeadNeighborRule', num)
 
   ###########
   # private #
