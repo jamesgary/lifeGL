@@ -11,20 +11,17 @@
       %a.button.playToggler.pause{:title => 'Pause'} I I
       %a.button.reset Reset
 
-      .colorPicker
+      .panel.colorPicker
         %h3 Cell:
         %input.cell
-      .colorPicker
+      .panel.colorPicker
         %h3 Background:
         %input.background
-
-      .ranger
+      .panel
         %h3 Cell Size:
         %select.cellSize
 
-      %br
-
-      .ranger
+      .rule
         %span.alive Live cells
         stay
         %span.alive alive
@@ -33,10 +30,7 @@
         and
         %select.liveCellMax
         neighbors.
-
-      %br
-
-      .ranger
+      .rule
         %span.dead Dead cells
         become
         %span.alive alive

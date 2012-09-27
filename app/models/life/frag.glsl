@@ -1,3 +1,7 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
@@ -11,43 +15,44 @@ uniform float maxDeadNeighborRule;
 
 void main( void ) {
   float t = time / 1000.0; // not used right now
-  vec2  p = gl_FragCoord.xy / resolution.xy;
-  vec2  m = vec2(mouse.x, resolution.y - mouse.y);
-  float d = distance(gl_FragCoord.xy, m.xy);
+  vec2  pos = gl_FragCoord.xy / resolution.xy;
+  vec2  mouse = vec2(mouse.x, resolution.y - mouse.y);
+  float dist = distance(gl_FragCoord.xy, mouse.xy);
   float aspect = resolution.x / resolution.y;
   float circleSize = 0.01 * resolution.x;
 
-  vec4 cColor = cellColor;
-  vec4 bColor = vec4(0.0, 0.0, 0.0, 0.0);
+  vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0);
 
-  if (m != vec2(0.0, 0.0) && d < circleSize) {
-		gl_FragColor = cColor;
+  if (mouse != vec2(0.0, 0.0) && dist < circleSize) {
+		gl_FragColor = cellColor;
 	} else {
 		float dx = 1.0 / resolution.x;
 		float dy = 1.0 / resolution.y;
-		vec4 v0 = texture2D( backbuffer, p );
-		vec4 v1 = texture2D( backbuffer, p + vec2( 0.0, dy ) );
-		vec4 v2 = texture2D( backbuffer, p + vec2( dx, 0.0 ) );
-		vec4 v3 = texture2D( backbuffer, p + vec2( 0.0, -dy ) );
-		vec4 v4 = texture2D( backbuffer, p + vec2( -dx, 0.0 ) );
-		vec4 v5 = texture2D( backbuffer, p + vec2( dx, dy ) );
-		vec4 v6 = texture2D( backbuffer, p + vec2( -dx, -dy ) );
-		vec4 v7 = texture2D( backbuffer, p + vec2( dx, -dy ) );
-		vec4 v8 = texture2D( backbuffer, p + vec2( -dx, dy ) );
+		vec4 self = texture2D( backbuffer, pos );
+    vec4 neighbors[8];
+    neighbors[0] = texture2D(backbuffer, pos + vec2(0.0,  dy));
+    neighbors[1] = texture2D(backbuffer, pos + vec2( dx, 0.0));
+    neighbors[2] = texture2D(backbuffer, pos + vec2(0.0, -dy));
+    neighbors[3] = texture2D(backbuffer, pos + vec2(-dx, 0.0));
+    neighbors[4] = texture2D(backbuffer, pos + vec2( dx,  dy));
+    neighbors[5] = texture2D(backbuffer, pos + vec2(-dx, -dy));
+    neighbors[6] = texture2D(backbuffer, pos + vec2( dx, -dy));
+    neighbors[7] = texture2D(backbuffer, pos + vec2(-dx,  dy));
 
-		vec4 s = v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
+    vec4 sum = vec4(0.0, 0.0, 0.0, 0.0);
+    for(int i = 0; i < 8; i++) {
+      sum += neighbors[i];
+    }
 
-		// live cell
-		if ( v0.a == 1.0 ) {
-			//if ( s.a < 2.0 || s.a > 3.0 )
-			if (minLiveNeighborRule <= s.a && s.a <= maxLiveNeighborRule)
-				gl_FragColor = cColor;
+		
+		if ( self.a == 1.0 ) { // live cell
+			if (minLiveNeighborRule <= sum.a && sum.a <= maxLiveNeighborRule)
+				gl_FragColor = cellColor;
 			else
-				gl_FragColor = bColor;
-		// dead cell
-		} else {
-			if (minDeadNeighborRule <= s.a && s.a <= maxDeadNeighborRule)
-				gl_FragColor = cColor;
+				gl_FragColor = bgColor;
+		} else { // dead cell
+			if (minDeadNeighborRule <= sum.a && sum.a <= maxDeadNeighborRule)
+				gl_FragColor = cellColor;
 		}
 	}
 }

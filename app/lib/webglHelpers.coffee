@@ -116,7 +116,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
   vertexShaderStrategy: (shader) ->
     @createShader(shader, @gl.VERTEX_SHADER)
   fragmentShaderStrategy: (shader) ->
-    @createShader("#ifdef GL_ES\nprecision highp float;\n#endif\n\n" + shader, @gl.FRAGMENT_SHADER)
+    @createShader(shader, @gl.FRAGMENT_SHADER)
   createShader: (src, type) ->
     shader = @gl.createShader(type)
     @gl.shaderSource(shader, src)

@@ -49,6 +49,10 @@ body {
     a {
       cursor: pointer;
     }
+    select {
+      position: relative;
+      top: -3px;
+    }
     .button {
       @include background-image(linear-gradient(
         darken($olive, 20%),
@@ -75,7 +79,7 @@ body {
       @include box-shadow(0 0 1px black);
       @include border-radius(3px);
       color: lighten($seafoam, 10%);
-      padding: 5px;
+      padding: 5px 10px;
       margin: 5px;
     }
     .playToggler {
@@ -84,20 +88,26 @@ body {
       width: 20px;
       display: inline-block;
     }
+    .panel {
+      display: inline-block;
+      margin-right: 10px;
+      h3 { display: inline-block; }
+    }
     .colorPicker {
-      display: inline-block;
-      h3 { display: inline-block; }
       input { display: none; }
+      .miniColors-triggerWrap {
+        position: relative;
+        top: -4px;
+      }
     }
-    .ranger {
-      display: inline-block;
-      h3 { display: inline-block; }
+    .rule {
+      display: block;
     }
-    .dead {
+    span.dead {
       font-weight: bold;
       color: red;
     }
-    .alive {
+    span.alive {
       font-weight: bold;
       color: lighten(green, 20%);
     }
@@ -118,7 +128,7 @@ body {
 
     display: inline-block;
     @include border-radius(100%);
-    @include box-shadow(0 0 1px black);
+    @include box-shadow(1px 1px 1px black);
     @include            background-image(radial-gradient(0 0, #eee 5px, #555 30px));
     &:hover  { @include background-image(radial-gradient(0 0, #fff 5px, #777 30px)); }
     &:active { @include background-image(radial-gradient(0 0, #ccc 5px, #222 30px)); }
@@ -130,7 +140,7 @@ body {
       font-weight:bold;
       margin-left:4px;
       position:relative;
-      top: -2px;
+      top: -3px;
       text-shadow: 1px 1px 1px black;
     }
 
