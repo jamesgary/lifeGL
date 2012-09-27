@@ -43,6 +43,12 @@ define ['lib/gameLoop'], (gameLoop) -> {
     -1.0,  1.0
   ])
 
+  # defaults
+  customVars: {}
+  pixelSize: 1
+  containerWidth: 100
+  containerHeight: 100
+
   initialize: ->
     try
       @gl = @canvas.getContext("experimental-webgl")
@@ -54,14 +60,8 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.bufferData(@gl.ARRAY_BUFFER, @squareData, @gl.STATIC_DRAW)
     @currentProgram = @gl.createProgram()
 
-    # defaults
-    @pixelSize = 1
-    @containerWidth = 100
-    @containerHeight = 100
-
     @resetViewport()
     @start_time = new Date().getTime()
-    @customVars = {}
   compile: ->
     @gl.linkProgram(@currentProgram)
     unless @gl.getProgramParameter(@currentProgram, @gl.LINK_STATUS)
@@ -152,7 +152,5 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.drawArrays(     @gl.TRIANGLES, 0, 6)
 
     # Swap buffers
-    tmp = @frontTarget
-    @frontTarget = @backTarget
-    @backTarget = tmp
+    [@frontTarget, @backTarget] = [@backTarget, @frontTarget]
 }

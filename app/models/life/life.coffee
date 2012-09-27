@@ -4,7 +4,6 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
     @setDimensions(params.width, params.height)
-    @cellColor = 'a8f565'
     webgl.setVar('cellColor', @hexToGlslRgb(@cellColor))
     webgl.setVar('minLiveNeighborRule', 2)
     webgl.setVar('maxLiveNeighborRule', 3)
@@ -34,6 +33,7 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.setVar('minDeadNeighborRule', num)
   setMaxDeadNeighborRule: (num) ->
     webgl.setVar('maxDeadNeighborRule', num)
+  cellColor: 'a8f565'
 
   ###########
   # private #
