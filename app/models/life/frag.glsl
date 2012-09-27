@@ -13,7 +13,7 @@ uniform float maxLiveNeighborRule;
 uniform float minDeadNeighborRule;
 uniform float maxDeadNeighborRule;
 
-void main( void ) {
+void main(void) {
   float t = time / 1000.0; // not used right now
   vec2  pos = gl_FragCoord.xy / resolution.xy;
   vec2  mousePos = vec2(mouse.x, resolution.y - mouse.y); // invert the mouse
@@ -38,20 +38,18 @@ void main( void ) {
     neighbors[5] = texture2D(backbuffer, pos + vec2(-dx, -dy));
     neighbors[6] = texture2D(backbuffer, pos + vec2( dx, -dy));
     neighbors[7] = texture2D(backbuffer, pos + vec2(-dx,  dy));
-
-    vec4 sum = vec4(0.0, 0.0, 0.0, 0.0);
+    float neighborCount = 0.0;
     for(int i = 0; i < 8; i++) {
-      sum += neighbors[i];
+      neighborCount += neighbors[i].a;
     }
-
 		
-		if ( self.a == 1.0 ) { // live cell
-			if (minLiveNeighborRule <= sum.a && sum.a <= maxLiveNeighborRule)
+		if (self.a == 1.0) { // live cell
+			if (minLiveNeighborRule <= neighborCount && neighborCount <= maxLiveNeighborRule)
 				gl_FragColor = cellColor;
 			else
 				gl_FragColor = bgColor;
 		} else { // dead cell
-			if (minDeadNeighborRule <= sum.a && sum.a <= maxDeadNeighborRule)
+			if (minDeadNeighborRule <= neighborCount && neighborCount <= maxDeadNeighborRule)
 				gl_FragColor = cellColor;
 		}
 	}
