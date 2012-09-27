@@ -25,7 +25,6 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
   setCellColor: (r, g, b) ->
     webgl.setVar('cellColor', @glslRgb(r, g, b))
   setPixelSize: (pixelSize) ->
-    #console.log pixelSize
     webgl.setPixelSize(pixelSize)
   setMinLiveNeighborRule: (num) ->
     webgl.setVar('minLiveNeighborRule', num)

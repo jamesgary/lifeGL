@@ -16,14 +16,14 @@ uniform float maxDeadNeighborRule;
 void main( void ) {
   float t = time / 1000.0; // not used right now
   vec2  pos = gl_FragCoord.xy / resolution.xy;
-  vec2  mouse = vec2(mouse.x, resolution.y - mouse.y);
-  float dist = distance(gl_FragCoord.xy, mouse.xy);
+  vec2  mousePos = vec2(mouse.x, resolution.y - mouse.y); // invert the mouse
+  float dist = distance(gl_FragCoord.xy, mousePos.xy);
   float aspect = resolution.x / resolution.y;
   float circleSize = 0.01 * resolution.x;
 
-  vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0);
+  vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0); // clear
 
-  if (mouse != vec2(0.0, 0.0) && dist < circleSize) {
+  if (mousePos.x != 0.0 && mousePos.y != 0.0 && dist < circleSize) {
 		gl_FragColor = cellColor;
 	} else {
 		float dx = 1.0 / resolution.x;

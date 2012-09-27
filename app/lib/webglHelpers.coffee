@@ -112,7 +112,6 @@ define ['lib/gameLoop'], (gameLoop) -> {
         console.log("SHADER ERROR: " + errorMessage)
       else
         @gl.attachShader(@currentProgram, shaderObj)
-      # @gl.deleteShader(shader)
   vertexShaderStrategy: (shader) ->
     @createShader(shader, @gl.VERTEX_SHADER)
   fragmentShaderStrategy: (shader) ->
