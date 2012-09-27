@@ -3,6 +3,14 @@
 @import url('jquery.miniColors.css');
 @import url('nouislider.css');
 
+@mixin sharpen-image {
+  // woefully unsupported
+  -ms-interpolation-mode: nearest-neighbor;  /* IE 7+ */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+
 body {
   // Willow theme: http://kuler.adobe.com/#themeID/2066229
   $seafoam: #C8E595;
@@ -17,9 +25,12 @@ body {
   overflow: hidden;
   padding: 0;
   canvas {
+    @include sharpen-image;
+    height: 100%;
     left: 0;
     position: absolute;
     top: 0;
+    width: 100%;
   }
   .dashboard {
     @include border-radius(12px);
@@ -95,6 +106,9 @@ body {
     }
     .colorPicker input {
       display: none;
+    }
+    .cellSize {
+      width: 200px;
     }
   }
 }

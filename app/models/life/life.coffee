@@ -3,15 +3,15 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.initGl(params.canvas)
     webgl.addVertexShaders([vertShader])
     webgl.addFragmentShaders([fragShader])
-    @setViewport(params.width, params.height) # prime the pump
+    @setDimensions(params.width, params.height)
     @cellColor = 'a8f565'
     webgl.setVar('cellColor', @hexToGlslRgb(@cellColor))
   start: ->
     webgl.animate()
   pause: ->
     webgl.pause()
-  setViewport: (width, height) ->
-    webgl.setViewport(width, height)
+  setDimensions: (width, height) ->
+    webgl.setDimensions(width, height)
   setMouse: (x, y) ->
     webgl.setMouse(x, y)
   reset: ->
@@ -20,6 +20,9 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.fullScreen()
   setCellColor: (r, g, b) ->
     webgl.setVar('cellColor', @glslRgb(r, g, b))
+  setPixelSize: (pixelSize) ->
+    #console.log pixelSize
+    webgl.setPixelSize(pixelSize)
 
   ###########
   # private #

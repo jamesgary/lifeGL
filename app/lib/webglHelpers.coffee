@@ -9,10 +9,14 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @addShaders(shaders, @fragmentShaderStrategy)
   addVertexShaders: (shaders) ->
     @addShaders(shaders, @vertexShaderStrategy)
-  setViewport: (width, height) ->
-    @canvas.width = width
-    @canvas.height = height
-    @gl.viewport(0, 0, width, height)
+  setDimensions: (@containerWidth, @containerHeight) ->
+    @resetViewport()
+  resetViewport: ->
+    @width  = @containerWidth  / @pixelSize
+    @height = @containerHeight / @pixelSize
+    @canvas.width = @width
+    @canvas.height = @height
+    @gl.viewport(0, 0, @width, @height)
     @createTargets()
   setMouse: (x, y) ->
     @mouse = { x: x, y: y }
@@ -22,6 +26,8 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @createTargets()
   setVar: (name, val) ->
     @customVars[name] = val
+  setPixelSize: (@pixelSize) ->
+    @resetViewport()
 
   ###########
   # private #
@@ -30,10 +36,10 @@ define ['lib/gameLoop'], (gameLoop) -> {
   # 2 triangles, making a rectangle
   squareData: new Float32Array([
     -1.0, -1.0,
-    1.0, -1.0,
+     1.0, -1.0,
     -1.0,  1.0,
-    1.0, -1.0,
-    1.0,  1.0,
+     1.0, -1.0,
+     1.0,  1.0,
     -1.0,  1.0
   ])
 
@@ -47,7 +53,13 @@ define ['lib/gameLoop'], (gameLoop) -> {
     @gl.bindBuffer(@gl.ARRAY_BUFFER, @buffer)
     @gl.bufferData(@gl.ARRAY_BUFFER, @squareData, @gl.STATIC_DRAW)
     @currentProgram = @gl.createProgram()
-    @setViewport(@canvas.width, @canvas.height)
+
+    # defaults
+    @pixelSize = 1
+    @containerWidth = 100
+    @containerHeight = 100
+
+    @resetViewport()
     @start_time = new Date().getTime()
     @customVars = {}
   compile: ->
@@ -66,9 +78,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
   createTargets: ->
     @frontTarget = @createTarget()
     @backTarget  = @createTarget()
-  createTarget: (width, height) ->
-    width =  @canvas.width
-    height = @canvas.height
+  createTarget: ->
     target = {}
     target.framebuffer  = @gl.createFramebuffer()
     target.renderbuffer = @gl.createRenderbuffer()
@@ -76,7 +86,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
 
     # set up framebuffer
     @gl.bindTexture          @gl.TEXTURE_2D,  target.texture
-    @gl.texImage2D           @gl.TEXTURE_2D,  0, @gl.RGBA, width, height, 0, @gl.RGBA, @gl.UNSIGNED_BYTE, null
+    @gl.texImage2D           @gl.TEXTURE_2D,  0, @gl.RGBA, @width, @height, 0, @gl.RGBA, @gl.UNSIGNED_BYTE, null
     @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_WRAP_S, @gl.CLAMP_TO_EDGE
     @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_WRAP_T, @gl.CLAMP_TO_EDGE
     @gl.texParameteri        @gl.TEXTURE_2D,  @gl.TEXTURE_MAG_FILTER, @gl.NEAREST
@@ -86,7 +96,7 @@ define ['lib/gameLoop'], (gameLoop) -> {
 
     # set up renderbuffer
     @gl.bindRenderbuffer        @gl.RENDERBUFFER, target.renderbuffer
-    @gl.renderbufferStorage     @gl.RENDERBUFFER, @gl.DEPTH_COMPONENT16, width, height
+    @gl.renderbufferStorage     @gl.RENDERBUFFER, @gl.DEPTH_COMPONENT16, @width, @height
     @gl.framebufferRenderbuffer @gl.FRAMEBUFFER,  @gl.DEPTH_ATTACHMENT, @gl.RENDERBUFFER, target.renderbuffer
 
     # clean up
@@ -119,9 +129,9 @@ define ['lib/gameLoop'], (gameLoop) -> {
     # Set uniforms for custom shader
     @gl.useProgram( @currentProgram)
     @gl.uniform1f(@gl.getUniformLocation(@currentProgram, "time"), new Date().getTime() - @start_time)
-    @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "resolution"), @canvas.width, @canvas.height)
+    @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "resolution"), @width, @height)
     @gl.uniform1i(@gl.getUniformLocation(@currentProgram, "backbuffer"), 0)
-    @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x, @mouse.y) if @mouse
+    @gl.uniform2f(@gl.getUniformLocation(@currentProgram, "mouse"), @mouse.x / @pixelSize, @mouse.y / @pixelSize) if @mouse
 
     for name, val of @customVars
       @gl.uniform4f(@gl.getUniformLocation(@currentProgram, name), val...)

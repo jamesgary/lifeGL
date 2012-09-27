@@ -10,15 +10,16 @@ void main( void ) {
   vec2  m = vec2(mouse.x, resolution.y - mouse.y);
   float d = distance(gl_FragCoord.xy, m.xy);
   float aspect = resolution.x/resolution.y;
+  float circleSize = 0.01 * resolution.x;
 
   vec4 cColor = cellColor;
   vec4 bColor = vec4(0.0, 0.0, 0.0, 0.0);
 
-  if (m != vec2(0.0, 0.0) && d < 20.0) {
+  if (m != vec2(0.0, 0.0) && d < circleSize) {
 		gl_FragColor = cColor;
 	} else {
-		float dx = 0.0008;
-		float dy = dx * aspect;
+		float dx = 1.0 / resolution.x;
+		float dy = 1.0 / resolution.y;
 		vec4 v0 = texture2D( backbuffer, p );
 		vec4 v1 = texture2D( backbuffer, p + vec2( 0.0, dy ) );
 		vec4 v2 = texture2D( backbuffer, p + vec2( dx, 0.0 ) );
