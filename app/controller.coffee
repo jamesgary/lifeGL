@@ -4,6 +4,7 @@ define ['models/life/life', 'jquery', 'miniColors'], (life, $) ->
     $('document').ready ->
       self.setWindowListener()
       self.setMouseListener()
+      self.setHiderListener()
       self.setPlayListener()
       self.setResetListener()
       self.setColorListener()
@@ -31,6 +32,12 @@ define ['models/life/life', 'jquery', 'miniColors'], (life, $) ->
         event.clientY,
       ),
       false
+    )
+
+  setHiderListener: ->
+    $('.hide').click(->
+      $('.dashboard').fadeToggle('fast')
+      $(this).toggleClass('hidden')
     )
 
   setPlayListener: ->

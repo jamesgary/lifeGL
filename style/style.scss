@@ -35,54 +35,19 @@ body {
     @include border-radius(12px);
     background: rgba(0, 0, 0, 0.5);
     color: $seafoam;
+    display: inline-block;
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     text-shadow: 1px 1px 1px black;
-    margin: 20px;
     padding: 10px 10px 20px;
     position: relative;
-    width: auto;
     h1 {
       font-size: 1.4em;
-      margin: 0 0 15px;
+      margin: 0 0 0px;
       padding: 0;
     }
     a {
       cursor: pointer;
-    }
-    .hide {
-      $button_size: 20px;
-      height: $button_size;
-      width:  $button_size;
-      cursor: pointer;
-
-      padding: 0;
-      position: absolute;
-      top:   $button_size / -2;
-      left:  $button_size / -2;
-
-      display: inline-block;
-      @include border-radius(100%);
-      @include box-shadow(0 0 1px black);
-      @include            background-image(radial-gradient(0 0, #eee 5px, #555 30px));
-      &:hover  { @include background-image(radial-gradient(0 0, #fff 5px, #777 30px)); }
-      &:active { @include background-image(radial-gradient(0 0, #ccc 5px, #222 30px)); }
-
-      &:after {
-        content:'\2013'; // unicode for ndash
-        color:white;
-        font-size:18px;
-        font-weight:bold;
-        margin-left:4px;
-        position:relative;
-        top: -2px;
-        text-shadow: 1px 1px 1px black;
-      }
-
-      &.closable:after {
-        content:'+';
-        top:-2px;
-      }
     }
     .button {
       @include background-image(linear-gradient(
@@ -91,6 +56,22 @@ body {
         darken($olive, 20%) 20%,
         darken($olive, 30%) 50%
       ));
+      &:hover {
+        @include background-image(linear-gradient(
+          darken($olive, 15%),
+          darken($olive,  5%) 10%,
+          darken($olive, 15%) 20%,
+          darken($olive, 25%) 50%
+        ));
+      }
+      &:active {
+        @include background-image(linear-gradient(
+          darken($olive, 25%),
+          darken($olive, 15%) 10%,
+          darken($olive, 25%) 20%,
+          darken($olive, 35%) 50%
+        ));
+      }
       @include box-shadow(0 0 1px black);
       @include border-radius(3px);
       color: lighten($seafoam, 10%);
@@ -119,6 +100,43 @@ body {
     .alive {
       font-weight: bold;
       color: lighten(green, 20%);
+    }
+  }
+  .dashboard, .hide {
+    margin: 20px;
+  }
+  .hide {
+    $button_size: 20px;
+    height: $button_size;
+    width:  $button_size;
+    cursor: pointer;
+
+    padding: 0;
+    position: absolute;
+    top:   $button_size / -2;
+    left:  $button_size / -2;
+
+    display: inline-block;
+    @include border-radius(100%);
+    @include box-shadow(0 0 1px black);
+    @include            background-image(radial-gradient(0 0, #eee 5px, #555 30px));
+    &:hover  { @include background-image(radial-gradient(0 0, #fff 5px, #777 30px)); }
+    &:active { @include background-image(radial-gradient(0 0, #ccc 5px, #222 30px)); }
+
+    &:after {
+      content:'\2013'; // unicode for ndash
+      color:white;
+      font-size:18px;
+      font-weight:bold;
+      margin-left:4px;
+      position:relative;
+      top: -2px;
+      text-shadow: 1px 1px 1px black;
+    }
+
+    &.hidden:after {
+      content:'+';
+      top:-2px;
     }
   }
 }
