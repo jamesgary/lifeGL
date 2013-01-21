@@ -2,7 +2,7 @@
 precision highp float;
 #endif
 
-uniform float time;
+uniform float time; // not used right now
 uniform vec2 mouse;
 uniform vec2 resolution;
 uniform sampler2D backbuffer;
@@ -14,14 +14,12 @@ uniform float minDeadNeighborRule;
 uniform float maxDeadNeighborRule;
 
 void main(void) {
-  float t = time / 1000.0; // not used right now
   vec2  pos = gl_FragCoord.xy / resolution.xy;
   vec2  mousePos = vec2(mouse.x, resolution.y - mouse.y); // invert the mouse
-  float dist = distance(gl_FragCoord.xy, mousePos.xy);
   float aspect = resolution.x / resolution.y;
+  float dist = distance(gl_FragCoord.xy, mousePos.xy);
   float circleSize = 0.01 * resolution.x;
-
-  vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0); // clear
+  vec4  bgColor = vec4(0.0, 0.0, 0.0, 0.0); // clear
 
   if (mousePos.x != 0.0 && mousePos.y != 0.0 && dist < circleSize) {
 		gl_FragColor = cellColor;
@@ -51,6 +49,8 @@ void main(void) {
 		} else { // dead cell
 			if (minDeadNeighborRule <= neighborCount && neighborCount <= maxDeadNeighborRule)
 				gl_FragColor = cellColor;
+			else
+				gl_FragColor = bgColor;
 		}
 	}
 }
