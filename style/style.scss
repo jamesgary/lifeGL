@@ -12,13 +12,11 @@
 
 body {
   // Willow theme: http://kuler.adobe.com/#themeID/2066229
-  $seafoam: #C8E595;
-  $olive:   #A5B26B;
-  $clay:    #8C8261;
-  $kabul:   #594138;
-  $dune:    #333130;
+  $seafoam:    #C8E595;
+  $olive:      #A5B26B;
+  $dark-green: #123123;
   @include user-select('none');
-  background-color: $kabul;
+  background-color: $dark-green;
   cursor: default;
   margin: 0;
   overflow: hidden;
@@ -45,6 +43,13 @@ body {
       font-size: 1.4em;
       margin: 0 0 0px;
       padding: 0;
+      .tiny {
+        font-size: 0.75em;
+        &, & a {
+          color: darken($seafoam, 30%);
+          display: inline-block;
+        }
+      }
     }
     a {
       cursor: pointer;

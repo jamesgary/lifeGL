@@ -33,7 +33,7 @@ define ['lib/webglHelpers', 'text!./frag.glsl', 'text!./vert.glsl' ], (webgl, fr
     webgl.setVar('minDeadNeighborRule', num)
   setMaxDeadNeighborRule: (num) ->
     webgl.setVar('maxDeadNeighborRule', num)
-  cellColor: 'a8f565'
+  cellColor: '22ff22'
 
   ###########
   # private #

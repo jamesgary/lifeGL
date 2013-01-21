@@ -15,7 +15,7 @@ guard 'haml', {
   :all_on_start => true,
   :input => 'markup',
   :hide_success => @quiet,
-  :output => ['public/build', 'public/dev'],
+  :output => 'public/dev',
 } do
   watch(%r{^.+(\.haml)$})
 end
